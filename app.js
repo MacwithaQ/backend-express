@@ -29,15 +29,30 @@ app.post("/api/products", (req, res) => {
 
 app.delete("/api/products/:productId", (req, res) => {
   const { productId } = req.params;
-  productData = productData.filter((product) => +product.id !== +productId);
-  res.status(204).end();
+  const foundProduct = productData.find(
+    (product) => +product.id === +productId
+  );
+  if (foundProduct) {
+    productData = productData.filter((product) => +product.id !== +productId);
+    res.status(204).end();
+  } else {
+    res.status(404).json({ msg: "product not found" });
+  }
 });
 
-app.get("/api/products/:id", (req, res) => {
-  const product = productData.find(
-    (someProduct) => +someProduct.id === +req.params.id
+app.get("/api/products/:productId", (req, res) => {
+  const { productId } = req.params;
+  const foundProduct = productData.find(
+    (product) => +product.id === +productId
   );
-  res.json(product);
+  if (foundProduct) {
+    const product = productData.find(
+      (someProduct) => +someProduct.id === +productId
+    );
+    res.json(product);
+  } else {
+    res.status(404).json({ msg: "product not found" });
+  }
 });
 
 app.get("/api/products", (req, res) => {
