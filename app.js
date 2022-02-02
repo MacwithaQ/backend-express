@@ -1,10 +1,13 @@
 const express = require("express");
 const { param } = require("express/lib/request");
 const productsRouter = require("./apis/products/routes");
+const connectDB = require("./database/database");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const app = express();
 
-const PORT = 8000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 
@@ -13,5 +16,6 @@ app.use("/api/products", productsRouter);
 
 // LISTEN TO RUN BACKEND SERVER
 app.listen(PORT, () => {
-  console.log("Server is listening!");
+  console.log("Server is listening to port", PORT);
+  connectDB();
 });

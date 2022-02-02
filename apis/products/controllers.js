@@ -1,5 +1,6 @@
 // IMPORTING DATA - To use products data in controller functions
 const products = require("../../data");
+const Product = require("../../database/models/Product");
 
 // Using data to create a variable data set that we can edit in controller functions
 let productData = products;
@@ -47,8 +48,13 @@ const getProductController = (req, res) => {
 };
 
 // Gets entire data list of products
-const getProductsController = (req, res) => {
-  res.json(productData);
+const getProductsController = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
 };
 
 module.exports = {
